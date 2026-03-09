@@ -1,1 +1,15 @@
-streamlit
+streamlit # the main package for making all of the site content and layout
+streamlit-aggrid
+streamlit_timeline
+
+pandas # for csv-handling among other things
+plotly # for making graphs
+matplotlib # for making graphs
+wordcloud # if you want to make a wordcloud
+xlsxwriter # If you want it to be possible for the reader to download an Excel file of the data
+
+
+
+
+
+#### You need to copy the text from the requirements-file
