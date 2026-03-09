@@ -7,8 +7,9 @@ plotly # for making graphs
 matplotlib # for making graphs
 wordcloud # if you want to make a wordcloud
 xlsxwriter # If you want it to be possible for the reader to download an Excel file of the data
-
-
+numpy
+seaborn
+scipy
 
 
 
