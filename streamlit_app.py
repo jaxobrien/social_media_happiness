@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from utils.charts.happiness_by_year import plot_happiness_by_year
+from utils.charts.happiness_social_media_chart_2 import df, build_happiness_socialmedia_chart
 
 # Load data
 df = pd.read_csv("utils/indexed_data_all_obs.csv", low_memory=False)
@@ -11,3 +12,7 @@ st.title("Exploring the relationship between social media use and children's hap
 # Chart 1
 fig = plot_happiness_by_year(df)
 st.pyplot(fig)
+
+# chart 2
+fig = build_happiness_socialmedia_chart(df)
+st.plotly_chart(fig, use_container_width=True)

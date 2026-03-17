@@ -4,8 +4,7 @@ import plotly.graph_objects as go
 from pathlib import Path
 
 # ── Load data ─────────────────────────────────────────────────
-# Resolves to the CSV one level above utils/ regardless of where
-# the script is called from
+# CSV lives in utils/, one level above this script (utils/charts/)
 _DATA_PATH = Path(__file__).resolve().parent.parent / "indexed_data_all_obs.csv"
 df = pd.read_csv(_DATA_PATH)
 
@@ -30,8 +29,6 @@ def build_happiness_socialmedia_chart(df: pd.DataFrame) -> go.Figure:
 
     # ── 1. Midpoint mapping for online_hrs (0–4 ordinal scale) ──
     hrs_midpoint = {0: 0, 1: 0.5, 2: 2, 3: 5, 4: 7}
-    hrs_labels   = {0: "None", 1: "<1 hr", 2: "1–3 hrs",
-                    3: "4–6 hrs", 4: "7+ hrs"}
 
     # ── 2. Drop rows missing key variables ──────────────────────
     df_clean = df.dropna(subset=["happiness_index", "online_hrs", "age", "year"]).copy()
@@ -46,12 +43,11 @@ def build_happiness_socialmedia_chart(df: pd.DataFrame) -> go.Figure:
         .reset_index()
     )
 
-    years  = sorted(df_clean["year"].unique())
-    ages   = sorted(df_clean["age"].unique())
+    years = sorted(df_clean["year"].unique())
+    ages  = sorted(df_clean["age"].unique())
 
     # ── 4. Colour palette (turbo-style, one colour per age) ─────
     def turbo_colours(n):
-        """Sample n evenly-spaced colours from a turbo-like palette."""
         turbo = [
             "#30123b", "#4145ab", "#4675ed", "#39a2fc", "#1bcfd4",
             "#24efa2", "#6bfc5b", "#bcf735", "#f1ca3a", "#fb8022",
@@ -68,12 +64,12 @@ def build_happiness_socialmedia_chart(df: pd.DataFrame) -> go.Figure:
     x_tickvals = [0, 0.5, 2, 5, 7]
     x_ticktext = ["None", "<1 hr", "1–3 hrs", "4–6 hrs", "7+ hrs"]
 
-    # Track which traces belong to each year (for slider steps)
     year_trace_indices: dict = {}
     trace_idx = 0
+    ages_seen = set()
 
     for yr in years:
-        yr_data = grouped[grouped["year"] == yr]
+        yr_data   = grouped[grouped["year"] == yr]
         yr_indices = []
 
         for age in ages:
@@ -90,8 +86,8 @@ def build_happiness_socialmedia_chart(df: pd.DataFrame) -> go.Figure:
                 mode        = "lines+markers",
                 name        = f"Age {age}",
                 legendgroup = f"Age {age}",
-                showlegend  = (yr == years[0]),
-                visible     = (yr == years[0]),
+                showlegend  = bool(age not in ages_seen),
+                visible     = bool(yr == years[0]),
                 line        = dict(color=colour, width=2),
                 marker      = dict(color=colour, size=8),
                 error_y     = dict(
@@ -110,6 +106,7 @@ def build_happiness_socialmedia_chart(df: pd.DataFrame) -> go.Figure:
                 ),
             ))
 
+            ages_seen.add(age)
             yr_indices.append(trace_idx)
             trace_idx += 1
 
@@ -145,7 +142,7 @@ def build_happiness_socialmedia_chart(df: pd.DataFrame) -> go.Figure:
         title      = f"Happiness vs Social Media Use — {years[0]}",
         title_font = dict(size=18),
         xaxis      = dict(
-            title     = "Daily Social Media Use",
+            title     = "Average Social Media Use on a Weekday",
             tickvals  = x_tickvals,
             ticktext  = x_ticktext,
             range     = [-0.5, 8],
