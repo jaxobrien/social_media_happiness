@@ -45,7 +45,7 @@ def build_legislation_map() -> px.choropleth:
         color_discrete_map=STATUS_COLORS,
         category_orders={"status": STATUS_ORDER},
         title=(
-            "Children's Social Media Regulation Around the World<br>"
+            "Status of social media regulation for children<br>"
             "<sup>Legislative status on minimum age requirements for social media access</sup>"
         ),
     )

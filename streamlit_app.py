@@ -12,7 +12,7 @@ data = pd.read_csv("utils/FINAL_DATA.csv", low_memory=False)
 
 
 # App title
-st.title("Exploring the relationship between social media use and children's happiness")
+st.title("If social media amplified problems, will banning it solve them?")
 
 # Chart 1
 fig = plot_happiness_by_year(df)
@@ -24,5 +24,10 @@ st.plotly_chart(fig, use_container_width=True)
 
 fig = render(data)
 st.plotly_chart(fig)  
+
+from utils.charts.social_media_legislation_map import build_legislation_map
+
+fig = build_legislation_map()
+st.plotly_chart(fig, use_container_width=True)
 
 
