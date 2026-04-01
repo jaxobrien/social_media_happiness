@@ -103,9 +103,8 @@ def build_legislation_map() -> px.choropleth:
 
     # Tidy hover tooltip
     fig.update_traces(
-        hovertemplate="<b>%{location}</b><br>Status: %{customdata[0]}<extra></extra>",
-        marker_line_color="white",
-        marker_line_width=0.4,
+        selector={"name": status_label},
+        hovertemplate="<b>%{location}</b><br>Status: " + status_label + "<extra></extra>",
     )
 
     return fig
