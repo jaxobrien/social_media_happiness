@@ -101,13 +101,15 @@ def build_legislation_map() -> px.choropleth:
         plot_bgcolor="rgba(0,0,0,0)",
     )
 
-    # Tidy hover tooltip
-    fig.update_traces(
-        selector={"name": status_label},
-        hovertemplate="<b>%{location}</b><br>Status: " + status_label + "<extra></extra>",
-    )
+ # Tidy hover tooltip — iterate over traces so each gets its status label hardcoded
+    for trace in fig.data:
+        trace.hovertemplate = "<b>%{location}</b><br>Status: " + trace.name + "<extra></extra>"
+        trace.marker.line.color = "white"
+        trace.marker.line.width = 0.4
 
     return fig
+
+
 
 
 # ── Allow the script to be run directly for a quick preview ──────────────
